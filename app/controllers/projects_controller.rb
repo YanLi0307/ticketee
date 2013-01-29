@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    puts "I am a doggy!"
+    #puts "I am a doggy!"
   end
 
   def new
@@ -13,7 +13,9 @@ class ProjectsController < ApplicationController
       flash[:notice] = "Project has been created."
       redirect_to @project
     else
-      # nothing, yet
+      flash[:alert] = "Project has not been created."
+      #<co id="ch03_926_1"/>
+      render :action => "new"
     end
   end
   
