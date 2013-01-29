@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   def index
-    #puts "I am a doggy!"
+    @projects = Project.all
   end
 
   def new
