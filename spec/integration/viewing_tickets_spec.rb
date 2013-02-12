@@ -2,11 +2,14 @@ require 'spec_helper'
 
 feature "Viewing tickets" do
   before do
+    user = Factory(:confirmed_user)
+    sign_in_as!(user)
     textmate_2 = Factory(:project, :name => "TextMate 2")
-    Factory(:ticket,
+    ticket = Factory(:ticket,
             :project => textmate_2,
             :title => "Make it shiny!",
             :description => "Gradients! Starbursts! Oh my!")
+    ticket.update_attribute(:user, user)
 
     internet_explorer = Factory(:project, :name => "Internet Explorer")
 
