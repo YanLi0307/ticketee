@@ -10,8 +10,12 @@ feature "Viewing tickets" do
             :title => "Make it shiny!",
             :description => "Gradients! Starbursts! Oh my!")
     ticket.update_attribute(:user, user)
+    
+    define_permission!(user, "view", textmate_2)
 
     internet_explorer = Factory(:project, :name => "Internet Explorer")
+
+    define_permission!(user, "view", internet_explorer)
 
     Factory(:ticket,
             :project => internet_explorer,
