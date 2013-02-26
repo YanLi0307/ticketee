@@ -1,10 +1,10 @@
 class ProjectsController < ApplicationController
   before_filter :authorize_admin!, :except => [:index, :show]
-  before_filter :authenticate_user!, :only => [:show]
+  before_filter :authenticate_user!, :only => [:index, :show]
   before_filter :find_project, :only => [:show, :edit, :update, :destroy]
 
   def index
-    @projects = Project.all
+    @projects = Project.for(current_user).all
   end
 
   def new
@@ -29,21 +29,13 @@ class ProjectsController < ApplicationController
   def edit
     #@project = Project.find(params[:id])
     #@project = Project.viewable_by(current_user).find(params[:id])
-    @project = if current_user.admin?
-      Project.find(params[:id])
-    else
-      Project.viewable_by(current_user).find(params[:id])
-    end
+    @project = Project.for(current_user).find(params[:id])
   end
 
   def update
     #@project = Project.find(params[:id])
     #@project = Project.viewable_by(current_user).find(params[:id])
-    @project = if current_user.admin?
-      Project.find(params[:id])
-    else
-      Project.viewable_by(current_user).find(params[:id])
-    end
+    @project = Project.for(current_user).find(params[:id])
 
     if @project.update_attributes(params[:project]) #<co id="ch04_143_1"/>
       flash[:notice] = "Project has been updated."
@@ -57,11 +49,8 @@ class ProjectsController < ApplicationController
   def destroy
     #@project = Project.find(params[:id])
     #@project = Project.viewable_by(current_user).find(params[:id])
-    @project = if current_user.admin?
-      Project.find(params[:id])
-    else
-      Project.viewable_by(current_user).find(params[:id])
-    end
+    @project = Project.for(current_user).find(params[:id])
+
     @project.destroy
     flash[:notice] = "Project has been deleted."
     redirect_to projects_path
@@ -71,11 +60,8 @@ class ProjectsController < ApplicationController
     def find_project
       #@project = Project.find(params[:id])
       #@project = Project.viewable_by(current_user).find(params[:id])
-      @project = if current_user.admin?
-      Project.find(params[:id])
-    else
-      Project.viewable_by(current_user).find(params[:id])
-    end
+      @project = Project.for(current_user).find(params[:id])
+    
       rescue ActiveRecord::RecordNotFound
       flash[:alert] = "The project you were looking" +
                       " for could not be found."
